@@ -5,7 +5,6 @@ from torch import optim
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 
-
 batch_size = 128
 epochs = 200
 channels_list = [1, 8, 16]
@@ -73,7 +72,7 @@ def main():
         runner.train(epoch)
         runner.test(epoch)
         with torch.no_grad():
-            sample = model.sample(64, device)
+            sample = model.sample(80, device)
             save_image(sample, './results_ae_' + str(latent_dim) + '/sample_' + str(epoch) + '.png')
 
 

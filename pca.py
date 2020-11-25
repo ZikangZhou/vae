@@ -5,8 +5,7 @@ from sklearn.decomposition import PCA
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 
-
-n_components = 2
+n_components = 0
 
 
 def main():
@@ -27,10 +26,13 @@ def main():
     comparison = torch.cat([torch.from_numpy(test_data[:8]).view(-1, 1, 28, 28),
                             torch.from_numpy(test_recovered[: 8]).view(-1, 1, 28, 28)])
     save_image(comparison, './results_pca/reconstruction_' + str(n_components) + '.png')
-    sample = pca.inverse_transform(np.random.randn(64, n_components))
+    sample = pca.inverse_transform(np.random.randn(80, n_components))
     save_image(torch.from_numpy(sample).view(-1, 1, 28, 28), './results_pca/sample_' + str(n_components) + '.png')
     print(-pca.score(test_data))
 
 
 if __name__ == '__main__':
-    main()
+    n_components_list = [1, 2, 4, 8, 16]
+    for n in n_components_list:
+        n_components = n
+        main()

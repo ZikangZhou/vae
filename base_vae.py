@@ -5,7 +5,7 @@ from typing import List, Any
 
 
 class BaseVAE(nn.Module):
-    
+
     def __init__(self) -> None:
         super(BaseVAE, self).__init__()
 
@@ -17,9 +17,6 @@ class BaseVAE(nn.Module):
 
     def sample(self, batch_size: int, current_device: torch.device, **kwargs) -> torch.tensor:
         raise RuntimeWarning()
-
-    def generate(self, x: torch.tensor, **kwargs) -> torch.tensor:
-        raise NotImplementedError
 
     @abstractmethod
     def forward(self, *inputs: torch.tensor) -> List[torch.tensor]:

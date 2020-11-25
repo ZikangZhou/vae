@@ -3,7 +3,7 @@ import torch
 from base_vae import BaseVAE
 from torch import nn
 from torch.nn import functional as F
-from typing import List, Callable, Union, Any, TypeVar, Tuple
+from typing import List, Any
 
 
 class VanillaVAE(BaseVAE):
@@ -56,8 +56,9 @@ class VanillaVAE(BaseVAE):
         eps = torch.randn_like(std)
         return mu + eps * std
 
-    def forward(self, inputs: torch.tensor) -> List[torch.tensor]:
-        mu, logvar = self.encode(inputs)
+    def forward(self, *inputs: torch.tensor) -> List[torch.tensor]:
+        x = inputs[0]
+        mu, logvar = self.encode(x)
         z = self.reparameterize(mu, logvar)
         return [self.decode(z), mu, logvar]
 
@@ -74,6 +75,3 @@ class VanillaVAE(BaseVAE):
         z = torch.randn(batch_size, self.latent_dim)
         z = z.to(current_device)
         return self.decode(z).cpu()
-
-    def generate(self, x: torch.tensor, **kwargs) -> torch.tensor:
-        return self.forward(x)[0]
