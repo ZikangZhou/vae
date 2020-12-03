@@ -8,7 +8,7 @@ from torchvision.utils import save_image
 batch_size = 128
 epochs = 200
 channels_list = [1, 8, 16]
-latent_dim = 1
+latent_dim = 16
 lr = 1e-4
 
 

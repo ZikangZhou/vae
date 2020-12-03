@@ -10,7 +10,7 @@ from vanilla_vae import VanillaVAE
 batch_size = 128
 epochs = 200
 channels_list = [1, 8, 16]
-latent_dim = 2
+latent_dim = 16
 num_classes = 10
 lr = 1e-4
 
@@ -56,15 +56,15 @@ class VAERunner:
                     comparison = torch.cat([data[:n],
                                             recon_batch.view(len(data), 1, 28, 28)[:n]])
                     save_image(comparison.cpu(),
-                               './results_cvae_' + str(latent_dim) + '/reconstruction_' + str(epoch) + '.png', nrow=n)
+                               './results_vae_' + str(latent_dim) + '/reconstruction_' + str(epoch) + '.png', nrow=n)
         test_loss /= len(self.test_loader.dataset)
         print('====> Epoch: {} Test set loss: {:.4f}'.format(epoch, test_loss))
 
 
 def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # model = VanillaVAE(channels_list, latent_dim).to(device)
-    model = CVAE(channels_list, latent_dim, num_classes).to(device)
+    model = VanillaVAE(channels_list, latent_dim).to(device)
+    # model = CVAE(channels_list, latent_dim, num_classes).to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     train_loader = torch.utils.data.DataLoader(
         datasets.MNIST('./data', train=True, download=True,
@@ -82,7 +82,7 @@ def main():
             for i in range(10):
                 labels[i * 8: i * 8 + 8] = i
             sample = model.sample(80, device, labels=labels)
-            save_image(sample, './results_cvae_' + str(latent_dim) + '/sample_' + str(epoch) + '.png')
+            save_image(sample, './results_vae_' + str(latent_dim) + '/sample_' + str(epoch) + '.png')
 
 
 if __name__ == '__main__':
